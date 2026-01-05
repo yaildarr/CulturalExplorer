@@ -22,3 +22,9 @@ dependencyResolutionManagement {
 rootProject.name = "CulturalExplorer"
 include(":app")
 include(":core")
+include(":feature")
+include(":feature:auth")
+include(":core:designsystem")
+include(":feature:auth:auth-api")
+include(":feature:auth:auth-impl")
+include(":core:domain")

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "709646407236",
+    "project_id": "culturalexplorer",
+    "storage_bucket": "culturalexplorer.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:709646407236:android:c39c826330ddbf83d84e11",
+        "android_client_info": {
+          "package_name": "ru.ildar.culturalexplorer"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDZsh9_4xRt6DPOV90kPfCmV4QT-tFe5dg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

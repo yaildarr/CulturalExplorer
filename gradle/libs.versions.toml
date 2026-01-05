@@ -12,6 +12,9 @@ koin-bom = "4.1.1"  # Stable version
 retrofit = "3.0.0"
 appcompat = "1.7.0"
 material = "1.12.0"
+firebase = "34.7.0"
+jetbrainsKotlinJvm = "2.0.21"
+nav_version = "2.9.6"
 
 
 [libraries]
@@ -42,12 +45,19 @@ koin-test = { module = "io.insert-koin:koin-test" }
 #retrofit
 retrofit = {module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit"}
 
+#firebase-auth
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase"}
+firebase-auth  = {module = "com.google.firebase:firebase-auth"}
+
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+
+androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "nav_version"}
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 android-library = { id = "com.android.library", version.ref = "agp" }
+jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
 
