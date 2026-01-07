@@ -73,6 +73,9 @@ dependencies {
 //    firebase
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.perfomance)
+    implementation(libs.firebase.crashlytics)
 
     //orbit-mvi
     implementation(libs.orbit.core)

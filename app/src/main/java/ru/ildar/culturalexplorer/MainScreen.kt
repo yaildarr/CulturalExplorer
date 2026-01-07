@@ -32,21 +32,16 @@ import ru.ildar.domain.model.FeatureItem
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
-    onArtMatchClick: () -> Unit,
     onBookMoodClick: () -> Unit,
-    onMovieRouletteClick: () -> Unit,
     onQuoteCreatorClick: () -> Unit,
-    modifier: Modifier = Modifier
 ) {
     val features = listOf(
-        FeatureItem("art", R.string.feature_art_title, R.drawable.ic_art, onArtMatchClick),
         FeatureItem("book", R.string.feature_book_title_main, R.drawable.ic_book, onBookMoodClick),
-        FeatureItem("movie", R.string.feature_movie_title, R.drawable.ic_movie, onMovieRouletteClick),
         FeatureItem("quote", R.string.feature_quote_title, R.drawable.ic_quote, onQuoteCreatorClick)
     )
 
     LazyVerticalGrid(
-            columns = GridCells.Fixed(2),
+            columns = GridCells.Fixed(1),
             contentPadding = PaddingValues(16.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -62,16 +57,3 @@ fun MainScreen(
             }
         }
     }
-
-@Preview(showBackground = true)
-@Composable
-private fun MainScreenPreview() {
-    CulturalExplorerTheme {
-        MainScreen(
-            onArtMatchClick = {},
-            onBookMoodClick = {},
-            onMovieRouletteClick = {},
-            onQuoteCreatorClick = {}
-        )
-    }
-}

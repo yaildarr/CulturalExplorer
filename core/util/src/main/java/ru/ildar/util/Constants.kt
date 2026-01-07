@@ -2,5 +2,5 @@ package ru.ildar.util
 
 object Constants {
     const val BOOK_URL = "https://openlibrary.org/"
-    const val MOVIE_URL = ""
+    const val QUOTE_URL = "https://api.quotable.io/quotes/"
 }

@@ -18,15 +18,12 @@ class BookDetailViewModel(
     fun onAction(action: BookDetailAction) = intent {
         when(action){
             is BookDetailAction.DetailsOpen -> {
-                Log.d("MyLog","Id = ${action.id}")
                 reduce { state.copy(isLoading = true) }
                 val result = useCase.invoke(action.id)
                 when(result){
                     is MyResult.Error -> {
-                        Log.d("MyLog","ошибка, ${result.message}")
                     }
                     is MyResult.Success<BookDetails> -> {
-                        Log.d("MyLog","бук ${result.data.toString()}")
                         reduce {
                             state.copy(
                                 book = result.data

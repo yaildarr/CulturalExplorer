@@ -2,6 +2,10 @@ package ru.ildar.auth_impl.ui.signup
 
 import android.util.Patterns
 import androidx.lifecycle.ViewModel
+import com.google.firebase.Firebase
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.analytics
+import com.google.firebase.analytics.logEvent
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.viewmodel.container
 import ru.ildar.api.usecase.SignUpUseCase
@@ -13,6 +17,12 @@ class SignUpViewModel(
 ) : ContainerHost<SignUpState, SignUpSideEffect>, ViewModel() {
 
     override val container = container<SignUpState, SignUpSideEffect>(SignUpState())
+
+    init {
+        Firebase.analytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
+            param(FirebaseAnalytics.Param.SCREEN_NAME, "SignUpScreen")
+        }
+    }
 
     fun onAction(action: SignUpAction) = intent {
         when (action) {
@@ -42,6 +52,7 @@ class SignUpViewModel(
                         reduce {
                             newState.copy(isLoading = false, isSuccess = true)
                         }
+                        postSideEffect(SignUpSideEffect.ShowSuccess)
                     }
                 }
             }

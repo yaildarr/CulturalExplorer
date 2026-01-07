@@ -70,7 +70,6 @@ fun BookDetailScreen(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        // Год
         state.book.firstPublishYear?.let {
             Text(
                 text = "Дата публикации: $it",

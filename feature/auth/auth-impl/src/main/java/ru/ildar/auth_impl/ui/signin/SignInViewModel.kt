@@ -2,14 +2,25 @@ package ru.ildar.auth_impl.ui.signin
 
 import android.util.Patterns
 import androidx.lifecycle.ViewModel
+import com.google.firebase.Firebase
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.viewmodel.container
 import ru.ildar.api.usecase.SignInUseCase
 import ru.ildar.domain.model.AuthResult
+import com.google.firebase.analytics.logEvent
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.analytics
 
 class SignInViewModel(
     private val signInUseCase: SignInUseCase,
 ) : ContainerHost<SignInState, SignInSideEffect>, ViewModel() {
+
+
+    init {
+        Firebase.analytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW) {
+            param(FirebaseAnalytics.Param.SCREEN_NAME, "SignInScreen")
+        }
+    }
 
     override val container = container<SignInState, SignInSideEffect>(SignInState())
 
@@ -41,6 +52,7 @@ class SignInViewModel(
                         reduce {
                             newState.copy(isLoading = false, isSuccess = true)
                         }
+                        postSideEffect(SignInSideEffect.ShowSuccess)
                     }
                 }
             }

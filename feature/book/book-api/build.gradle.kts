@@ -13,4 +13,8 @@ kotlin {
 }
 dependencies {
     implementation(project(":core:domain"))
+    testImplementation(libs.junit)
+    testImplementation(libs.mockk)
+    testImplementation(libs.coroutines.test)
+    testImplementation(project(":feature:quote:quote-api"))
 }

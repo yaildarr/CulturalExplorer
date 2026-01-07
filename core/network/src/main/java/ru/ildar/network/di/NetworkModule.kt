@@ -8,13 +8,20 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import ru.ildar.domain.model.Quote
 import ru.ildar.network.BookApiService
+import ru.ildar.network.QuoteApiService
 import ru.ildar.network.adapter.DescriptionTypeAdapter
 import ru.ildar.network.dto.DescriptionDto
 import ru.ildar.util.Constants
+import java.security.cert.X509Certificate
+import java.util.concurrent.TimeUnit
+import javax.net.ssl.SSLContext
+import javax.net.ssl.TrustManager
+import javax.net.ssl.X509TrustManager
 
 
-val MOVIE_API = named("MOVIE_API")
+val QUOTE_API = named("QUOTE_API")
 val BOOK_API= named("BOOK_API")
 
 val networkModule = module {
@@ -22,14 +29,27 @@ val networkModule = module {
         val logging = HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
         }
+        //у второй апишки нет ssl сертификата, поэтому так :(
+        OkHttpClient.Builder().apply {
+                val trustAllCerts = arrayOf<TrustManager>(object : X509TrustManager {
+                    override fun checkClientTrusted(chain: Array<out X509Certificate>?, authType: String?) {}
+                    override fun checkServerTrusted(chain: Array<out X509Certificate>?, authType: String?) {}
+                    override fun getAcceptedIssuers(): Array<X509Certificate> = arrayOf()
+                })
 
-        OkHttpClient.Builder()
-            .addInterceptor(logging)
+                val sslContext = SSLContext.getInstance("SSL")
+                sslContext.init(null, trustAllCerts, java.security.SecureRandom())
+
+                sslSocketFactory(sslContext.socketFactory, trustAllCerts[0] as X509TrustManager)
+                hostnameVerifier { _, _ -> true }
+        }.addInterceptor(logging)
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
             .build()
     }
-    single(MOVIE_API) {
+    single(QUOTE_API) {
         Retrofit.Builder()
-            .baseUrl(Constants.MOVIE_URL)
+            .baseUrl(Constants.QUOTE_URL)
             .client(get())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
@@ -56,7 +76,7 @@ val networkModule = module {
     }
 
 
-//    single {
-//        get<Retrofit>(API_2).create(SecondApi::class.java)
-//    }
+    single {
+        get<Retrofit>(QUOTE_API).create(QuoteApiService::class.java)
+    }
 }

@@ -8,4 +8,6 @@ object Routes {
 
     const val BOOK_SCREEN = "book_screen"
     const val BOOOK_DETAIL_SCREEN = "book_detail_screen"
+
+    const val RANDOM_QUOTES_SCREEN = "random_quotes_screen"
 }

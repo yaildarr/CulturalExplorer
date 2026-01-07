@@ -3,6 +3,9 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
+    id("com.google.firebase.firebase-perf")
+    alias(libs.plugins.detekt)
 }
 
 android {
@@ -38,6 +41,11 @@ android {
     buildFeatures {
         compose = true
     }
+    detekt {
+        toolVersion = "2.0.0-alpha.1"
+        buildUponDefaultConfig = true
+        autoCorrect = true
+    }
 }
 
 dependencies {
@@ -45,6 +53,8 @@ dependencies {
     implementation(project(":feature:book:book-impl"))
     implementation(project(":feature:auth:auth-api"))
     implementation(project(":feature:auth:auth-impl"))
+    implementation(project(":feature:quote:quote-api"))
+    implementation(project(":feature:quote:quote-impl"))
     implementation(project(":core:domain"))
     implementation(project(":core:network"))
     api(project(":core:designsystem"))
@@ -74,6 +84,11 @@ dependencies {
 
     //firebase
     implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.perfomance)
+    implementation(libs.firebase.crashlytics)
+
+
 
     //navigation
     implementation(libs.androidx.navigation.compose)
