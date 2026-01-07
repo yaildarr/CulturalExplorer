@@ -1,6 +1,6 @@
 [versions]
 agp = "8.9.1"
-kotlin = "2.0.21"
+kotlin = "2.2.0"
 coreKtx = "1.16.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
@@ -12,11 +12,21 @@ koin-bom = "4.1.1"  # Stable version
 retrofit = "3.0.0"
 appcompat = "1.7.0"
 material = "1.12.0"
+firebase = "34.7.0"
+jetbrainsKotlinJvm = "2.0.21"
+nav_version = "2.9.6"
+orbit = "10.0.0"
+koil = "3.3.0"
+converterGson = "2.9.0"
+logging = "5.1.0"
+mockk = "1.14.7"
+coroutines = "1.10.2"
+junitJunit = "4.12"
+detekt = "2.0.0-alpha.1"
 
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
-junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
@@ -42,12 +52,44 @@ koin-test = { module = "io.insert-koin:koin-test" }
 #retrofit
 retrofit = {module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit"}
 
+#firebase-auth
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase"}
+firebase-auth  = {module = "com.google.firebase:firebase-auth"}
+firebase-analytics = {module = "com.google.firebase:firebase-analytics"}
+firebase-crashlytics = {module = "com.google.firebase:firebase-crashlytics"}
+firebase-perfomance = {module = "com.google.firebase:firebase-perf"}
+
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+
+androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "nav_version"}
+
+#orbit
+orbit-core = {module = "org.orbit-mvi:orbit-core", version.ref = "orbit"}
+orbit-viewmodel = {module = "org.orbit-mvi:orbit-viewmodel", version.ref = "orbit"}
+orbit-compose = {module = "org.orbit-mvi:orbit-compose", version.ref = "orbit"}
+
+#coil
+coil-compose={module="io.coil-kt.coil3:coil-compose", version.ref="koil"}
+coil-network={module="io.coil-kt.coil3:coil-network-okhttp", version.ref="koil"}
+
+converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
+
+okhttp3-logging-interceptor = {module ="com.squareup.okhttp3:logging-interceptor", version.ref="logging"}
+
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+mockk = { group="io.mockk", name="mockk", version.ref = "mockk" }
+coroutines-test = { group="org.jetbrains.kotlinx", name="kotlinx-coroutines-test", version.ref = "coroutines"}
+junit-junit = { group = "junit", name = "junit", version.ref = "junitJunit" }
+
+
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 android-library = { id = "com.android.library", version.ref = "agp" }
+jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
+detekt = {id = "dev.detekt", version.ref = "detekt"}
 

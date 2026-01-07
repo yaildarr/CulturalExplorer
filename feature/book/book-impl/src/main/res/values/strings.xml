@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="feature_book_title">Книга настроения</string>
+    <string name="search_books_hint">Введите ваше настроение(напр. Любовь)…</string>
+    <string name="no_books_found">Книги не найдены</string>
+    <string name="enter_query_to_search">Введите запрос, чтобы найти книги</string>
+</resources>

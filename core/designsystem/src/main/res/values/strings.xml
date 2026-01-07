@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="feature_art_title">Картины</string>
+    <string name="feature_book_title_main">Книги</string>
+    <string name="feature_movie_title">Фильмы</string>
+    <string name="feature_quote_title">Цитаты</string>
+</resources>
