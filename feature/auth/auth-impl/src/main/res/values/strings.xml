@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="Continue">Продолжить</string>
+    <string name="enter_password">Введите пароль</string>
+    <string name="enter_email">Введите почту</string>
+    <string name="register_label">Регистрация</string>
+    <string name="sign_in">Авторизироваться</string>
+    <string name="sign_in_label">Авторизация</string>
+    <string name="or">Или</string>
+    <string name="create_acc">Создать аккаунт</string>
+</resources>

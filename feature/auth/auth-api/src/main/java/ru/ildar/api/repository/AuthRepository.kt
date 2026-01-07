@@ -1,10 +1,12 @@
 package ru.ildar.api.repository
 
-import ru.ildar.domain.model.MyResult
+import ru.ildar.domain.model.AuthResult
 
 interface AuthRepository {
 
-    suspend fun signUp(email: String, password: String) : MyResult
+    suspend fun signUp(email: String, password: String) : AuthResult
 
     suspend fun isAuthenticated() : Boolean
+
+    suspend fun signIn(email: String, password: String) : AuthResult
 }

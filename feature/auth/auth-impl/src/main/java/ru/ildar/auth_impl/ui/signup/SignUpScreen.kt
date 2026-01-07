@@ -15,12 +15,13 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
@@ -30,38 +31,21 @@ import ru.ildar.designsystem.R
 import ru.ildar.designsystem.components.CustomButton
 import ru.ildar.designsystem.components.CustomTextField
 import ru.ildar.designsystem.components.PasswordTextField
+import org.orbitmvi.orbit.compose.collectAsState
+import org.orbitmvi.orbit.compose.collectSideEffect
 
 @Composable
 fun SignUpScreen(
     modifier: Modifier = Modifier,
     viewModel: SignUpViewModel = koinViewModel(),
     onSignUpSuccess: () -> Unit = {},
-    onNavigateBack: () -> Unit = {}
+    onNavigateSignIn: () -> Unit = {}
 ) {
-    val viewState = viewModel.viewState.collectAsState()
-    val state = viewModel.state.collectAsState()
+    val state = viewModel.collectAsState().value
 
-    val snackbarHostState = remember { SnackbarHostState() }
-    val scope = rememberCoroutineScope()
-
-    // Обработка состояний
-    LaunchedEffect(state) {
-        when (val currentState = state) {
-            is SignUpState.Success -> {
-                onSignUpSuccess()
-            }
-
-            is SignUpState.Error -> {
-                scope.launch {
-                    snackbarHostState.showSnackbar(
-                        message = currentState.message,
-                        withDismissAction = true
-                    )
-                    viewModel.onEvent(SignUpEvent.ResetError)
-                }
-            }
-
-            else -> Unit
+    viewModel.collectSideEffect {
+        when(it){
+            SignUpSideEffect.ShowSuccess -> {onSignUpSuccess()}
         }
     }
 
@@ -70,50 +54,62 @@ fun SignUpScreen(
             .padding(horizontal = dimensionResource(R.dimen.padding_medium))
             .fillMaxSize(),
     ) {
-        SnackbarHost(
-            hostState = snackbarHostState,
-            modifier = Modifier.align(Alignment.CenterHorizontally)
-        ) { data ->
-            Snackbar(
-                snackbarData = data,
-                containerColor = MaterialTheme.colorScheme.error,
-                contentColor = MaterialTheme.colorScheme.onError
-            )
-        }
 
         Column(
-            modifier = Modifier.weight(1f),
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
+
         ) {
             Text(
-                text = "Регистрация",
+                text = stringResource(ru.ildar.auth_impl.R.string.register_label),
                 style = MaterialTheme.typography.displayLarge,
             )
 
             Spacer(modifier = Modifier.padding(vertical = dimensionResource(id = R.dimen.padding_large)))
 
-            // Поле email
             CustomTextField(
-                value = viewState.value.email,
-                onValueChange = { viewModel.onEvent(SignUpEvent.EmailChanged(it)) },
-                placeholderText = "Введите почту",
+                value = state.email,
+                onValueChange = { viewModel.onAction(SignUpAction.EmailChanged(it)) },
+                placeholderText = stringResource(ru.ildar.auth_impl.R.string.enter_email),
                 modifier = Modifier.fillMaxWidth(),
+                enabled = !state.isLoading
             )
 
 
             Spacer(modifier = Modifier.padding(vertical = dimensionResource(id = R.dimen.padding_small)))
 
-            // Поле пароля
             PasswordTextField(
-                value = viewState.value.password,
-                onValueChange = { viewModel.onEvent(SignUpEvent.PasswordChanged(it)) },
-                placeholderText = "Введите пароль",
+                value = state.password,
+                onValueChange = { viewModel.onAction(SignUpAction.PasswordChanged(it)) },
+                placeholderText = stringResource(ru.ildar.auth_impl.R.string.enter_password),
                 modifier = Modifier.fillMaxWidth(),
-                enabled = !viewState.value.isLoading
+                enabled = !state.isLoading
             )
 
-            // Ошибка
-            viewState.value.errorMessage?.let { error ->
+            Spacer(modifier.padding(dimensionResource(id = R.dimen.padding_small)))
+
+            Text(
+                text = stringResource(ru.ildar.auth_impl.R.string.or),
+                style = MaterialTheme.typography.bodyMedium,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(modifier.padding(dimensionResource(id = R.dimen.padding_small)))
+
+            CustomButton(
+                text = stringResource(ru.ildar.auth_impl.R.string.sign_in),
+                onClick = {onNavigateSignIn()},
+                modifier = Modifier
+                    .padding(horizontal = dimensionResource(id = R.dimen.padding_extra_large))
+                    .fillMaxWidth(),
+                containerColor = MaterialTheme.colorScheme.secondary,
+                contentColor = MaterialTheme.colorScheme.onSecondary
+            )
+
+            state.errorMessage?.let { error ->
                 Spacer(modifier = Modifier.padding(vertical = 4.dp))
                 Text(
                     text = error,
@@ -124,8 +120,7 @@ fun SignUpScreen(
             }
         }
 
-        // Кнопка регистрации
-        if (viewState.value.isLoading) {
+        if (state.isLoading) {
             CircularProgressIndicator(
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
@@ -133,10 +128,10 @@ fun SignUpScreen(
             )
         } else {
             CustomButton(
-                text = "Продолжить",
-                onClick = { viewModel.onEvent(SignUpEvent.SignUpClicked) },
+                text = stringResource(ru.ildar.auth_impl.R.string.Continue),
+                onClick = { viewModel.onAction(SignUpAction.SignUpClicked) },
                 modifier = Modifier.fillMaxWidth(),
-                enabled = viewState.value.isSignUpEnabled && !viewState.value.isLoading
+                enabled = state.isSignUpEnabled && !state.isLoading
             )
         }
 

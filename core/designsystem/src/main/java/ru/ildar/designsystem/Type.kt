@@ -25,7 +25,7 @@ val Typography = Typography(
     bodyLarge = TextStyle(
         fontFamily = Roboto,
         fontWeight = FontWeight.Bold,
-        fontSize = 32.sp,
+        fontSize = 16.sp,
         letterSpacing = 0.5.sp
     ),
     //нежирный обычный текст

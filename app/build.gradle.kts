@@ -41,10 +41,12 @@ android {
 }
 
 dependencies {
-
+    implementation(project(":feature:book:book-api"))
+    implementation(project(":feature:book:book-impl"))
     implementation(project(":feature:auth:auth-api"))
     implementation(project(":feature:auth:auth-impl"))
     implementation(project(":core:domain"))
+    implementation(project(":core:network"))
     api(project(":core:designsystem"))
 
     implementation(libs.androidx.core.ktx)
@@ -75,4 +77,9 @@ dependencies {
 
     //navigation
     implementation(libs.androidx.navigation.compose)
+
+    //orbit-mvi
+    implementation(libs.orbit.core)
+    implementation(libs.orbit.compose)
+    implementation(libs.orbit.viewmodel)
 }

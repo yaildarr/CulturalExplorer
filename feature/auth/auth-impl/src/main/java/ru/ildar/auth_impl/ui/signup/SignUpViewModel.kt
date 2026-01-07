@@ -2,91 +2,58 @@ package ru.ildar.auth_impl.ui.signup
 
 import android.util.Patterns
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
+import org.orbitmvi.orbit.ContainerHost
+import org.orbitmvi.orbit.viewmodel.container
 import ru.ildar.api.usecase.SignUpUseCase
-import ru.ildar.domain.model.MyResult
+import ru.ildar.domain.model.AuthResult
 
 
 class SignUpViewModel(
-    private val signUpUseCase: SignUpUseCase
-) : ViewModel() {
+    private val signUpUseCase: SignUpUseCase,
+) : ContainerHost<SignUpState, SignUpSideEffect>, ViewModel() {
 
-    private val _viewState = MutableStateFlow<SignUpViewState>(SignUpViewState())
-    val viewState: StateFlow<SignUpViewState> = _viewState
+    override val container = container<SignUpState, SignUpSideEffect>(SignUpState())
 
-    private val _state = MutableStateFlow<SignUpState>(SignUpState.Idle)
-    val state: StateFlow<SignUpState> = _state
-
-    fun onEvent(event: SignUpEvent) {
-        when (event) {
-            is SignUpEvent.EmailChanged -> {
-                updateEmail(event.email)
-                validateForm()
+    fun onAction(action: SignUpAction) = intent {
+        when (action) {
+            is SignUpAction.EmailChanged -> {
+                val newState = state.copy(email = action.email)
+                reduce { validateForm(newState) }
             }
 
-            is SignUpEvent.PasswordChanged -> {
-                updatePassword(event.password)
-                validateForm()
+            is SignUpAction.PasswordChanged -> {
+                val newState = state.copy(password = action.password)
+                reduce {validateForm(newState)}
             }
 
-            SignUpEvent.SignUpClicked -> {
-                signUp()
-            }
-
-            SignUpEvent.ResetError -> {
-                resetError()
-            }
-        }
-    }
-
-    private fun updateEmail(email: String) {
-        _viewState.update { it.copy(email = email) }
-    }
-
-    private fun updatePassword(password: String) {
-        _viewState.update { it.copy(password = password) }
-    }
-
-    private fun validateForm() {
-        val email = _viewState.value.email
-        val password = _viewState.value.password
-
-        val isEmailValid = email.isNotBlank() && Patterns.EMAIL_ADDRESS.matcher(email).matches()
-        val isPasswordValid = password.length >= 6
-
-        _viewState.update {
-            it.copy(isSignUpEnabled = isEmailValid && isPasswordValid)
-        }
-    }
-
-    private fun signUp() {
-        viewModelScope.launch {
-            _state.value = SignUpState.Loading
-            _viewState.update { it.copy(isLoading = true, errorMessage = null) }
-            val result = signUpUseCase.invoke(_viewState.value.email, _viewState.value.password)
-            when (result){
-                is MyResult.Error -> {
-                    _state.value = SignUpState.Error(result.message)
-                    _viewState.update { it.copy(isLoading = false, errorMessage = result.message) }
+            SignUpAction.SignUpClicked -> {
+                val newState = state.copy(isLoading = true, errorMessage = null)
+                reduce {
+                    newState
                 }
-                is MyResult.Success -> {
-                    _state.value = SignUpState.Success(result.userId)
-
+                val result = signUpUseCase.invoke(state.email,state.password)
+                when (result){
+                    is AuthResult.Error -> {
+                        reduce {
+                            newState.copy(isLoading = false, errorMessage = result.message)
+                        }
+                    }
+                    is AuthResult.Success -> {
+                        reduce {
+                            newState.copy(isLoading = false, isSuccess = true)
+                        }
+                    }
                 }
-
             }
-            _viewState.update { it.copy(isLoading = false) }
-
         }
     }
 
-
-    private fun resetError() {
-        _state.value = SignUpState.Idle
-        _viewState.update { it.copy(errorMessage = null) }
+    private fun validateForm(state: SignUpState): SignUpState {
+        val isEmailValid = state.email.isNotBlank() &&
+                Patterns.EMAIL_ADDRESS.matcher(state.email).matches()
+        val isPasswordValid = state.password.length >= 6
+        return state.copy(isSignUpEnabled = isEmailValid && isPasswordValid)
     }
+
+
 }

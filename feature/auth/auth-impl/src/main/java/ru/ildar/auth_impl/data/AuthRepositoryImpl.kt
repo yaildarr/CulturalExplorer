@@ -6,20 +6,21 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException
 import kotlinx.coroutines.tasks.await
 import ru.ildar.api.repository.AuthRepository
-import ru.ildar.domain.model.MyResult
+import ru.ildar.domain.model.AuthResult
 import java.io.IOException
 import java.net.SocketTimeoutException
 
 class AuthRepositoryImpl(
     private val firebaseAuth: FirebaseAuth,
 ) : AuthRepository {
+
     override suspend fun signUp(
         email: String,
         password: String
-    ): MyResult {
+    ): AuthResult {
         return try{
             val result = firebaseAuth.createUserWithEmailAndPassword(email,password).await()
-            MyResult.Success(userId = result.user?.uid ?: "")
+            AuthResult.Success(userId = result.user?.uid ?: "")
         } catch (e: Exception){
             e.toAuthResult()
         }
@@ -30,16 +31,28 @@ class AuthRepositoryImpl(
         return firebaseAuth.currentUser != null
     }
 
-    private fun Exception.toAuthResult(): MyResult {
+    override suspend fun signIn(
+        email: String,
+        password: String
+    ): AuthResult {
+        return try{
+            val result = firebaseAuth.signInWithEmailAndPassword(email,password).await()
+            AuthResult.Success(userId = result.user?.uid ?: "")
+        } catch (e: Exception){
+            e.toAuthResult()
+        }
+    }
+
+    private fun Exception.toAuthResult(): AuthResult {
         return when (this) {
             is FirebaseAuthWeakPasswordException ->
-                MyResult.Error("Пароль должен содержать минимум 6 символов")
+                AuthResult.Error("Пароль должен содержать минимум 6 символов")
             is FirebaseAuthUserCollisionException ->
-                MyResult.Error("Пользователь с таким email уже существует")
+                AuthResult.Error("Пользователь с таким email уже существует")
             is SocketTimeoutException, is IOException ->
-                MyResult.Error("Проверьте подключение к интернету")
+                AuthResult.Error("Проверьте подключение к интернету")
             else ->
-                MyResult.Error("Ошибка регистрации: ${localizedMessage}")
+                AuthResult.Error("Ошибка регистрации: ${localizedMessage}")
         }
     }
 }

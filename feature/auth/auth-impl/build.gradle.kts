@@ -71,4 +71,10 @@ dependencies {
 //    firebase
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
+
+    //orbit-mvi
+    implementation(libs.orbit.core)
+    implementation(libs.orbit.compose)
+    implementation(libs.orbit.viewmodel)
+
 }
