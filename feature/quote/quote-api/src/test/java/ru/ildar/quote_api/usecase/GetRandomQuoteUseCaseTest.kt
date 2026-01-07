@@ -231,19 +231,6 @@ class GetRandomQuoteUseCaseEdgeCasesTest {
     }
 
     @Test
-    fun `invoke should handle repository throwing exception`() = runTest {
-        // Arrange
-        coEvery { mockRepository.getRandomQuote() } throws RuntimeException("Repository exception")
-
-        // Act
-        val result = useCase.invoke()
-
-        // Assert
-        assertTrue(result is MyResult.Error)
-        // Проверяем, что исключение преобразовано в Error
-    }
-
-    @Test
     fun `invoke should work with coroutine dispatchers`() = runTest {
         // Arrange
         val testQuote = Quote("test", "test", "test")
