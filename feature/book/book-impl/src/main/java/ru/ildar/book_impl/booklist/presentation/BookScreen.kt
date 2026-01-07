@@ -38,14 +38,16 @@ import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
+import ru.ildar.book_impl.BookItemPlaceholder
+import ru.ildar.book_impl.BookListItem
 import ru.ildar.book_impl.R
-
+import ru.ildar.domain.model.Book
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BookListScreen(
-    onBookClick: (bookId: String) -> Unit,
+    onBookClick: (Book: String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: BookListViewModel = koinViewModel()
 ) {
@@ -69,7 +71,7 @@ fun BookListScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 16.dp)
+                .padding(horizontal = dimensionResource(ru.ildar.designsystem.R.dimen.padding_medium))
         ) {
             Text(
                 text = stringResource(R.string.feature_book_title),
@@ -156,7 +158,6 @@ fun BookListScreen(
             }
         }
 
-    // Автофокус при открытии
     LaunchedEffect(Unit) {
         scope.launch {
             focusRequester.requestFocus()

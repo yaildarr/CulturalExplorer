@@ -57,4 +57,6 @@ dependencies {
     implementation(libs.koin.compose)
     implementation(libs.koin.androidx.compose)
 
+    implementation(libs.okhttp3.logging.interceptor)
+
 }

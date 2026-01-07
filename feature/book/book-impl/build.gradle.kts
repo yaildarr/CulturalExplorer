@@ -82,4 +82,7 @@ dependencies {
     //koil
     implementation(libs.coil.compose)
     implementation(libs.coil.network)
+
+    implementation(libs.androidx.navigation.compose)
+
 }

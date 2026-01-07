@@ -1,4 +1,4 @@
-package ru.ildar.book_impl.booklist.presentation
+package ru.ildar.book_impl
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -52,7 +52,7 @@ fun BookListItem(
             )
         } else {
             Image(
-                painter = painterResource(ru.ildar.book_impl.R.drawable.ic_book_placeholder),
+                painter = painterResource(R.drawable.ic_book_placeholder),
                 contentDescription = null,
                 modifier = Modifier.size(80.dp)
             )
@@ -129,4 +129,28 @@ private fun PlaceholderBox(
                 MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f)
             )
     )
+}
+
+@Composable
+fun BookInfoItem(
+    label: String,
+    value: String?
+) {
+    if (value.isNullOrBlank()) return
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 6.dp)
+    ) {
+        Text(
+            text = label,
+            style = MaterialTheme.typography.labelMedium,
+            color = MaterialTheme.colorScheme.primary
+        )
+        Text(
+            text = value,
+            style = MaterialTheme.typography.bodyMedium
+        )
+    }
 }

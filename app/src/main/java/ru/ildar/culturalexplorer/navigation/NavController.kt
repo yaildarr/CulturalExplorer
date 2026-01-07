@@ -3,12 +3,15 @@ package ru.ildar.culturalexplorer.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import org.koin.androidx.compose.koinViewModel
 import ru.ildar.auth_impl.ui.signin.SignInScreen
 import ru.ildar.auth_impl.ui.signup.SignUpScreen
+import ru.ildar.book_impl.bookdetail.presentation.BookDetailScreen
 import ru.ildar.book_impl.booklist.presentation.BookListScreen
 import ru.ildar.culturalexplorer.AppViewModel
 import ru.ildar.culturalexplorer.MainScreen
@@ -59,7 +62,18 @@ fun AppNavigation(
         }
 
         composable(route = Routes.BOOK_SCREEN) {
-            BookListScreen({})
+            BookListScreen(
+                {navController.navigate("${Routes.BOOOK_DETAIL_SCREEN}?bookId=${it.substringAfter("/works/")}")}
+            )
+        }
+        composable(route = "${ Routes.BOOOK_DETAIL_SCREEN}?bookId={bookId}",
+            arguments = listOf(
+                navArgument("bookId") {
+                    type = NavType.StringType
+                    defaultValue = ""
+                }
+            )) {
+            BookDetailScreen(navController = navController)
         }
     }
 }

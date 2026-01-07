@@ -18,6 +18,7 @@ nav_version = "2.9.6"
 orbit = "10.0.0"
 koil = "3.3.0"
 converterGson = "2.9.0"
+logging = "5.1.0"
 
 
 [libraries]
@@ -67,6 +68,9 @@ coil-compose={module="io.coil-kt.coil3:coil-compose", version.ref="koil"}
 coil-network={module="io.coil-kt.coil3:coil-network-okhttp", version.ref="koil"}
 
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
+
+okhttp3-logging-interceptor = {module ="com.squareup.okhttp3:logging-interceptor", version.ref="logging"}
+
 
 
 
